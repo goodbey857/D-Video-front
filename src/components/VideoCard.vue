@@ -26,7 +26,7 @@
             {{ video.authorName}}
           </v-card-subtitle>
           <v-card-subtitle class="pl-2 pt-0">
-            {{ views }} views<v-icon>mdi-circle-small</v-icon
+            {{ views }} 次观看<v-icon>mdi-circle-small</v-icon
             >{{ createDate }}
           </v-card-subtitle>
         </v-col>

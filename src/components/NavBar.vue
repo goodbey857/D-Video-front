@@ -3,13 +3,13 @@
     <v-app-bar class="white" flat app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="font-weight-bold"><router-link to="/" class="black--text"
-          style="text-decoration: none">VueTube</router-link></v-toolbar-title>
+          style="text-decoration: none">DVideo</router-link></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field flat hide-details append-icon="mdi-magnify" placeholder="Search" outlined dense v-model="searchText"
         @click:append="search" class="hidden-sm-and-down"></v-text-field>
 
       <v-spacer></v-spacer>
-      <v-menu offsetY>
+      <!-- <v-menu offsetY>
         <template v-slot:activator="{ on: menu }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
@@ -28,9 +28,9 @@
             <v-list-item-title>Go live</v-list-item-title>
           </v-list-item>
         </v-list>
-      </v-menu>
+      </v-menu> -->
 
-      <v-tooltip bottom>
+      <!-- <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on"> <v-icon size="25">mdi-apps</v-icon></v-btn>
         </template>
@@ -42,14 +42,14 @@
             <v-icon size="25">mdi-bell</v-icon></v-btn>
         </template>
         <span>Notifications</span>
-      </v-tooltip>
+      </v-tooltip> -->
 
       <v-menu offset-y left open-on-hover>
         <template v-slot:activator="{ on }">
-          <v-btn variant="tonal"  depressed  v-on="on"  @click="signin" :value="loginText" > 
+          <v-btn variant="tonal" depressed v-on="on" @click="signin" :value="loginText">
             <v-icon left>mdi-wallet-outline</v-icon>
             {{loginText}}
-            
+
           </v-btn>
         </template>
 
@@ -57,7 +57,7 @@
           <v-list>
             <v-list-item>
               <v-list-item-avatar>
-                <img :src="$store.getters.currentIpfsGateway+currentUser.profileImageCid"/>
+                <img :src="$store.getters.currentIpfsGateway+currentUser.profileImageCid" />
               </v-list-item-avatar>
 
               <v-list-item-content>
@@ -74,19 +74,19 @@
               <v-list-item-icon>
                 <v-icon>mdi-account-box</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>Your channel</v-list-item-title>
+              <v-list-item-title>我的主页</v-list-item-title>
             </v-list-item>
             <v-list-item router to="/studio">
               <v-list-item-icon>
                 <v-icon>mdi-youtube-studio</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>VueTube Studio</v-list-item-title>
+              <v-list-item-title>我的后台</v-list-item-title>
             </v-list-item>
             <v-list-item router to="/" @click="signout">
               <v-list-item-icon>
                 <v-icon>mdi-login-variant</v-icon>
               </v-list-item-icon>
-              <v-list-item-title>Sign out</v-list-item-title>
+              <v-list-item-title>退出登录</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-card>
@@ -101,33 +101,29 @@
             'hidden-lg-and-up': $route.name === 'Watch' ? false : true,
           }">
             <v-app-bar-nav-icon @click="drawer = !drawer" class="mr-5"></v-app-bar-nav-icon>
-            <v-toolbar-title class="font-weight-bold">VueTube</v-toolbar-title>
+            <v-toolbar-title class="font-weight-bold">DVideo</v-toolbar-title>
           </v-list-item>
           <v-divider class="hidden-lg-and-up"></v-divider>
           <div v-for="parentItem in items" :key="parentItem.header">
             <v-subheader v-if="parentItem.header" class="pl-3 py-4 subtitle-1 font-weight-bold text-uppercase">{{
               parentItem.header }}</v-subheader>
-            <v-list-item v-for="(item, i) in parentItem.pages" :key="item.title" link class="mb-0" router :to="item.link"
+            <v-list-item v-for="item in parentItem.pages" :key="item.title" link class="mb-0" router :to="item.link"
               exact active-class="active-item">
-              <v-list-item-icon v-if="parentItem.header !== 'Subscriptions'">
+              <v-list-item-icon v-if="parentItem.header !== '关注的人'">
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-icon>
               <v-list-item-avatar v-else class="mr-5">
-                <img :src="`https://randomuser.me/api/portraits/men/${i}.jpg`" />
+                <img :src="item.profileImageUrl" />
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title class=" font-weight-medium subtitle-2">{{
                   item.title
-                }}</v-list-item-title>
+                  }}</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-divider class="mt-2 mb-2"></v-divider>
           </div>
 
-          <span v-for="link in links" :key="link.text">
-            <span v-if="link.text === 'Terms'" class="mb-2 d-block"> </span>
-            <v-btn href router :to="link.link" text class="text-capitalize px-1" small>{{ link.text }}</v-btn>
-          </span>
         </v-list>
       </div>
     </v-navigation-drawer>
@@ -137,12 +133,13 @@
 <script>
 import { mapGetters } from 'vuex';
 import authAPI from '@/apis/authAPI';
-
+import userApi from "@/apis/userApi";
 
 
 export default {
   data: () => ({
     drawer: false,
+    followers: [],
     items: [
       {
         header: null,
@@ -159,100 +156,91 @@ export default {
       {
         header: null,
         pages: [
+          // {
+          //   title: "Library",
+          //   link: "#l",
+          //   icon: "mdi-play-box-multiple",
+          // },
           {
-            title: "Library",
-            link: "#l",
-            icon: "mdi-play-box-multiple",
-          },
-          {
-            title: "History",
+            title: "观看记录",
             link: "/history",
             icon: "mdi-history",
           },
           {
-            title: "Your videos",
-            link: "/channels/ddd",
+            title: "我的视频",
+            link: "/channels/@me",
             icon: "mdi-play-box-outline",
           },
 
           {
-            title: "Watch later",
-            link: "#wl",
-            icon: "mdi-clock",
+            title: "我的收藏",
+            link: "/starred",
+            icon: "mdi-star",
           },
 
           {
-            title: "Liked videos",
-            link: "#lw",
+            title: "我的喜欢",
+            link: "/liked",
             icon: "mdi-thumb-up",
           },
         ],
       },
       {
-        header: "Subscriptions",
-        pages: [
-          {
-            title: "Traversy Media",
-            link: "#tm",
-            icon: "mdi-badge-account",
-          },
-          {
-            title: "The New Boston",
-            link: "#tn",
-            icon: "mdi-badge-account",
-          },
-          {
-            title: "Net Ninija",
-            link: "#nn",
-            icon: "mdi-badge-account",
-          },
-          {
-            title: "Chris Hawks",
-            link: "#ch",
-            icon: "mdi-badge-account",
-          },
-        ],
+        header: "关注的人",
+        pages: [],
+        //  [
+        //   {
+        //     title: "Traversy Media",
+        //     link: "#tm",
+        //     icon: "mdi-badge-account",
+        //   },
+        //   {
+        //     title: "The New Boston",
+        //     link: "#tn",
+        //     icon: "mdi-badge-account",
+        //   },
+        //   {
+        //     title: "Net Ninija",
+        //     link: "#nn",
+        //     icon: "mdi-badge-account",
+        //   },
+        //   {
+        //     title: "Chris Hawks",
+        //     link: "#ch",
+        //     icon: "mdi-badge-account",
+        //   },
+        // ],
       },
-      {
-        header: "MORE FROM VUETUBE",
-        pages: [
-          {
-            title: "VueTube Premium",
-            link: "#vp",
-            icon: "mdi-youtube",
-          },
-          {
-            title: "Gaming",
-            link: "#g",
-            icon: "mdi-youtube-gaming",
-          },
-          {
-            title: "Live",
-            link: "#li",
-            icon: "mdi-access-point",
-          },
-        ],
-      },
+      // {
+      //   header: "MORE FROM VUETUBE",
+      //   pages: [
+      //     {
+      //       title: "VueTube Premium",
+      //       link: "#vp",
+      //       icon: "mdi-youtube",
+      //     },
+      //     {
+      //       title: "Gaming",
+      //       link: "#g",
+      //       icon: "mdi-youtube-gaming",
+      //     },
+      //     {
+      //       title: "Live",
+      //       link: "#li",
+      //       icon: "mdi-access-point",
+      //     },
+      //   ],
+      // },
       {
         header: null,
         pages: [
           {
-            title: "Setting",
+            title: "设置",
             link: "#sg",
             icon: "mdi-cog",
           },
           {
-            title: "Report history",
-            link: "#rh",
-            icon: "mdi-flag",
-          },
-          {
-            title: "Help",
-            link: "#hp",
-            icon: "mdi-help-circle",
-          },
-          {
-            title: "Send feedback",
+            title: "反馈",
             link: "#f",
             icon: "mdi-message-alert",
           },
@@ -293,51 +281,28 @@ export default {
       authAPI.signout();
       this.$store.commit('CLEAR_AUTH');
       
+    },
+
+    async getFollowers(){
+      if(this.isAuthenticated){
+        var myFollowers = await userApi.getFollowers();
+        this.followers = myFollowers;
+        this.followers.forEach((follower) => {
+          follower.profileImageUrl = this.$store.getters.currentIpfsGateway.concat(follower.profileImageCid) ;
+          follower.title = follower.username;
+          follower.link = "/channels/"+follower.address
+        })
+        this.items.forEach((item) => {
+          if (item.header == '关注的人'){
+            item.pages = this.followers.slice(0,10);
+          }
+        })
+
+      }
     }
   },
 
-    // async getSiweMessage (address) {
-    //   var messageResp = await fetch('/api/auth/message/'.concat(address),{
-    //     method: 'GET'
-    //   });
 
-    //   var message = await messageResp.text();
-    //   console.log(message);
-    //   return message;
-    // },
-
-    // connectWallet () {
-    //   provider.send('eth_requestAccounts', [])
-    //     .catch(() => console.log('user rejected request'));
-    //     this.userAddress = provider.selectedAddress;
-    // },
-
-    // async signInWithEthereum () {
-    //   if (this.userAddress){
-    //     return;
-    //   }
-    //   const signer = await provider.getSigner();
-    //   const message = await this.getSiweMessage(
-    //       signer.address
-    //     );
-    //   var signedMessage = await signer.signMessage(message)
-    //   // 发给后端验证，后端验证通过后，返回一个token，前端保存
-    //   fetch('/api/auth/signin',{
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //         },
-    //     body: JSON.stringify({
-    //       signature: signedMessage,
-    //       address: signer.address,
-    //       message: message,
-         
-    //     })
-    //   } )
-
-    //   console.log(signedMessage);
-    //   this.userAddress = signer.address;
-    // },
 
 
   computed:{
@@ -357,6 +322,7 @@ export default {
     this.drawer = this.$route.name === "Watch" ? false : this.drawer;
 
     window.ethereum.on('connect', (info) => this.chainId = info.chainId);
+    this.getFollowers()
     console.log(this.currentUser)
     // window.ethereum.on('accountsChanged', (accounts) => {
     //   if(accounts.length != 0){

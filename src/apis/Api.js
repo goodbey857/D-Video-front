@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '../store'
 
 export default () => {
     const token = localStorage.getItem('token')
@@ -18,15 +19,22 @@ export default () => {
     // }
 
     axiosInstance.interceptors.response.use(
-        (response) => response,
+        (response) => {
+            return response;
+        },
         (error) => {
             if (error.response.status === 401) {
                 localStorage.removeItem('token')
                 localStorage.removeItem('user')
-                location.reload()
+                store.dispatch('signIn').then(() => {
+                    location.reload()
+                });  
+            } else if (error.response.status === 302) {
+                location.replace('/')
             }
             return Promise.reject(error)
-        }
+        },
+        
     )
 
     return axiosInstance

@@ -91,6 +91,38 @@ async function getSeriesList(address){
     return { code: -1};
 }
 
+async function getSeriesVideoList(id){
+    var seriesVideoListResp = await Api().get(`/video/series/${id}`);
+    if (seriesVideoListResp.status == 200 && seriesVideoListResp.data.code == 0) {
+        return seriesVideoListResp.data;
+    }
+    return { code: -1};
+}
+
+async function search(keyword){
+    var searchResp = await Api().get(`/video/search/?word=${keyword}&page=1&size=100`);
+    if (searchResp.status == 200 && searchResp.data.code == 0) {
+        return searchResp.data.data;
+    }
+    return { code: -1};
+}
+
+async function getLikedVideos(){
+    var likedVideoListResp = await Api().get(`/video/liked`);
+    if (likedVideoListResp.status == 200 && likedVideoListResp.data.code == 0) {
+        return likedVideoListResp.data.data;
+    }
+    return { code: -1};
+}
+
+async function getStarredVideos(){
+    var starredVideoListResp = await Api().get(`/video/starred`);
+    if (starredVideoListResp.status == 200 && starredVideoListResp.data.code == 0) {
+        return starredVideoListResp.data.data;
+    }
+    return { code: -1};
+}
+
 export default {
     getNewVideos,
     getHotVideos, 
@@ -102,5 +134,9 @@ export default {
     getSeriesVideos,
     getFollowVideos,
     getSomeBodyVideos,
-    getSeriesList
+    getSeriesList,
+    getSeriesVideoList,
+    search,
+    getLikedVideos,
+    getStarredVideos
 }

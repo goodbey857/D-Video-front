@@ -41,8 +41,8 @@
 
                     <v-card-subtitle class="pl-2 pb-0">
                       {{ video.views }}
-                      views<v-icon>mdi-circle-small</v-icon>
-                      {{ video.likes }}likes<v-icon>mdi-circle-small</v-icon>
+                      次观看<v-icon>mdi-circle-small</v-icon>
+                      {{ video.likes }}次喜欢<v-icon>mdi-circle-small</v-icon>
                       {{  video.createdAt }}
                     </v-card-subtitle>
                     <v-card-subtitle class="pl-2 pt-0">

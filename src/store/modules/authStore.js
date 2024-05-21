@@ -39,6 +39,7 @@ const mutations = {
         state.token = null
         state.user = null
         state.isUserLoggedIn = false
+        state.address = null
         localStorage.clear()
     },
     SET_ADDRESS(state, address) {
@@ -53,16 +54,24 @@ const actions = {
             var address = await authAPI.connectWallet();
             commit('SET_ADDRESS', address);
         }
-        var message = await authAPI.getSignMessage(state.address);
-        var signResult = await authAPI.signInWithEthereum(message);
-        var data = signResult.data;
-        if(data.code == 0){
-            var token = signResult.headers.token;
-            commit('SET_TOKEN', token)
-            commit('SET_USER_DATA', data.user)
-            commit('SET_ADDRESS', state.address)
+        
+        try{
+            var message = await authAPI.getSignMessage(state.address);
+            var signResult = await authAPI.signInWithEthereum(message);
+            var data = signResult.data;
+            if (data.code == 0) {
+                var token = signResult.headers.token;
+                commit('SET_TOKEN', token)
+                commit('SET_USER_DATA', data.user)
+                commit('SET_ADDRESS', data.user.address)
 
+            }
+        }catch(e){
+            console.log(data)
         }
+        
+        
+        
     },
 }
 

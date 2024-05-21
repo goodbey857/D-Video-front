@@ -166,6 +166,9 @@
             </v-card-actions>
           </v-card>
         </v-col>
+        <v-col cols="12" sm="6" md="4">
+          <card-static v-bind="totalProfit"></card-static>
+        </v-col>
       </v-row>
     </v-container>
     <upload-video-modal
@@ -177,20 +180,31 @@
       @closeDialog="subscribersDialog = false"
     />
   </div>
+  
 </template>
 
 <script>
 import UploadVideoModal from '@/components/UploadVideoModal'
 import SubscribersModal from '@/components/SubscribersModal'
+import CardStatic from '@/components/cards/CardStatic.vue';
 export default {
   data: () => ({
     loading: true,
     dialog: false,
-    subscribersDialog: false
+    subscribersDialog: false,
+    totalProfit :{
+      title: 'Total Profit',
+      color: 'secondary',
+      icon: 'ri-pie-chart-2-line',
+      stats: '$25.6k',
+      change: 42,
+      subtitle: 'Weekly Project',
+    }
   }),
   components: {
     UploadVideoModal,
-    SubscribersModal
+    SubscribersModal,
+    CardStatic
   },
   mounted() {}
 }

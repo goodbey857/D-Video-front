@@ -1,7 +1,7 @@
 <template>
   <div id="home" class="pa-4"  v-infinite-scroll="loadMore"  infinite-scroll-disabled="loading" infinite-scroll-distance="10">
     <v-container fluid>
-      <h3 class="headline font-weight-medium">Recommended</h3>
+      <h3 class="headline font-weight-medium">最热视频</h3>
       <v-row>
         <v-col
           cols="12"

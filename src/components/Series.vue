@@ -19,7 +19,7 @@
             
             large
           >
-            <v-card class="card"  flat router :to="'/watch/'+series.id">
+            <v-card class="card"  flat router :to="'/series/'+series.id">
               <v-row no-gutters>
                 <v-col class="mx-auto" cols="12" sm="8" md="5" lg="4">
                   <!-- <v-responsive max-height="100%"> -->

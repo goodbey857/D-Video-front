@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import StudioNavBar from '@/components/StudioNavBar.vue'
+import AdminNavBar from '@/components/AdminNavBar.vue'
+
 
 Vue.use(VueRouter)
 
@@ -48,7 +50,7 @@ const routes = [
         name: 'Dashboard',
         component: () =>
           import(
-            /* webpackChunkName: "dashboard" */ '../views/Studio/Dashboard.vue'
+            /* webpackChunkName: "dashboard" */ '../views/Studio/Analytics.vue'
           )
       },
       {
@@ -62,7 +64,65 @@ const routes = [
         name: 'Detail',
         component: () =>
           import(/* webpackChunkName: "video" */ '../views/Studio/Details.vue')
+      },
+      {
+        path: 'analytics',
+        name: 'Analytics',
+        component: () => import(/* webpackChunkName: "video" */ '../views/Studio/Analytics.vue')
+      },
+      {
+        path: 'comments',
+        name: 'Comments',
+        component: () => import(/* webpackChunkName: "video" */ '../components/cards/CommentTable.vue')
+      },
+      {
+        path: 'tokenRecord',
+        name: 'TokenRecord',
+        component: () => import(/* webpackChunkName: "video" */ '../views/Studio/TokenRecord.vue')
+      },
+      
+    ]
+  },
+  {
+    path: '/admin',
+    components: {
+      AdminNavBar,
+      default: () =>
+        import(/* webpackChunkName: "admin" */ '../views/Admin/Index.vue')
+    },
+    children:[
+      {
+        path: 'userData',
+        name: 'UserData',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/UserData.vue')
+      },
+      {
+        path: 'videoData',
+        name: 'VideoData',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/VideoData.vue')
+      },
+      {
+        path: 'commentData',
+        name: 'CommentData',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/CommentData.vue')
+      },
+      {
+        path: 'videoTransferData',
+        name: 'VideoTransferData',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/VideoTransferData.vue')
+      },
+      {
+        path: 'rewardData',
+        name: 'RewardData',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/RewardData.vue')
+      },
+      {
+        path: 'judge',
+        name: 'Judge',
+        component: () => import(/* webpackChunkName: "admin" */ '../views/Admin/Judge.vue')
       }
+      
+
     ]
   },
   {
@@ -118,7 +178,33 @@ const routes = [
       default: () => import(/* webpackChunkName: "video" */ '../views/Subscribe.vue')
     }
 
-  }
+  },
+  {
+    path: '/series/:id',
+    name: 'Series',
+    components: {
+      NavBar,
+      default: () => import(/* webpackChunkName: "video" */ '../views/SeriesDetail.vue')
+    }
+  },
+  {
+    path: '/starred',
+    name: 'starred',
+    components: {
+      NavBar,
+      default: () => import(/* webpackChunkName: "video" */ '../views/StarredVideo.vue')
+    }
+
+  },
+  {
+    path: '/liked',
+    name: 'liked',
+    components: {
+      NavBar,
+      default: () => import(/* webpackChunkName: "video" */ '../views/LikedVideo.vue')
+    }
+
+  },
 ]
 
 const router = new VueRouter({

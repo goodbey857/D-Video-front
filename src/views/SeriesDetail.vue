@@ -1,7 +1,7 @@
 <template>
-  <div id="subscribe" class="pa-4"  v-infinite-scroll="loadMore"  infinite-scroll-disabled="loading" infinite-scroll-distance="10">
+  <div id="seriesDetail" class="pa-4">
     <v-container fluid>
-      <h3 class="headline font-weight-medium">关 注</h3>
+      <h3 class="headline font-weight-medium">Series</h3>
       <v-row>
         <v-col
           cols="12"
@@ -17,6 +17,7 @@
               :card="{ maxWidth: 350 }"
               :video="i"
             ></video-card>
+
           </v-skeleton-loader>
         </v-col>
       </v-row>
@@ -29,7 +30,7 @@ import videoCard from '@/components/VideoCard'
 import videoAPI from '@/apis/videoAPI'
 
 export default {
-  name: 'Subscribe',
+  name: 'Home',
   data: () => ({
     loading: true,
     page: 1,
@@ -45,14 +46,11 @@ export default {
   },
   methods: {
     loadMore(){
-      this.loading = true
-      var videoListCopy = this.videoList
-      videoAPI.getFollowVideos(this.page,20).then(res => {
-        videoListCopy.push(...res)
-        if(res.length < 20 ) 
-          this.loading = true;
-        else
-          this.loading = false
+      
+      var id = this.$route.params.id;
+      videoAPI.getSeriesVideoList(id).then(res => {
+        this.videoList.push(...res.seriesVideoList)
+        this.loading = false
       })
       this.page++
       

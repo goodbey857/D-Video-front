@@ -1,7 +1,7 @@
 <template >
     <div v-infinite-scroll="loadMore"  infinite-scroll-disabled="loading" infinite-scroll-distance="10">
         <v-card class="transparent" flat>
-            <v-card-title>Uploads</v-card-title>
+            <v-card-title>视频</v-card-title>
             <v-row>
                 <v-col
                 cols="12"

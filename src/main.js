@@ -47,7 +47,7 @@ extend('password', {
 
 extend('size', {
   ...size,
-  message: 'video size should be less than 5 MB!'
+  message: 'video size should be less than 500 MB!'
 })
 
 Vue.config.productionTip = false

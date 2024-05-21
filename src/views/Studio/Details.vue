@@ -118,8 +118,8 @@ export default {
       rules: [
         (value) =>
           !value ||
-          value.size < 5000000 ||
-          'Video size should be less than 5 MB!'
+          value.size < 500000000 ||
+          'Video size should be less than 500 MB!'
       ],
       categories: ['People', 'Technology', 'Fashion'],
       visibilty: ['Public', 'Private'],

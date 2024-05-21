@@ -35,10 +35,45 @@ async function getInfo(userAddress){
     return {code: -1}
 }
 
+async function search(keyword){
+    var resp = await Api().get(`/user/search?keyword=${keyword}`);
+    if(resp.status == 200 && resp.data.code == 0){
+        return resp.data.users;
+    }
+}
+
+async function getFollowers(){
+    var resp = await Api().get(`/user/followers`);
+    if(resp.status == 200 && resp.data.code == 0){
+        return resp.data.followers;
+    }
+    return [];
+    
+}
+
+async function changeUsername(newUsername){
+    var resp = await Api().post(`/user/changeUsername/${newUsername}`)
+    if(resp.status == 200 && resp.data.code == 0){
+        return resp.data;
+    }
+    return {code: -1}
+}
+
+async function changeAvatar(cid){
+    var resp = await Api().post(`/user/changeAvatar/${cid}`);
+    if(resp.status == 200 && resp.data.code == 0){
+        return resp.data;
+    }
+    return {code: -1}
+}
 
 
 export default {
     follow,
     unfollow,
     getInfo,
+    search,
+    getFollowers,
+    changeUsername,
+    changeAvatar
 }
